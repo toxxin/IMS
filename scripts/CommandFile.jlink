@@ -1,0 +1,8 @@
+r
+h
+exec device = STM32L151CB
+loadbin ./Debug/IMS.bin 0x08000000
+verifybin ./Debug/IMS.bin 0x08000000
+r
+g
+q
