@@ -1,0 +1,149 @@
+import "nanopb.proto";
+
+message GSMModule_p {
+	optional string model_id = 1 [(nanopb).max_size = 40];
+	optional string manufacturer_id = 2 [(nanopb).max_size = 40];
+	optional string revision = 3 [(nanopb).max_size = 40];
+	required uint64 sn = 4;
+	required uint64 imsi = 5;
+}
+
+
+message GSMSignal_p {
+	required uint32 rssi = 1;
+	optional uint32 ber = 2;
+}
+
+
+message GSMCell_p {
+	required uint32 ARFCN = 1;
+	required uint32 C1 = 2;
+	required uint32 C2 = 3;
+	required uint32 C31 =4; 
+	required uint32 C32 = 5;
+	required uint32 RxLevelFull = 6;
+	required uint32 PtmsiId = 7;
+	required uint32 PLMN = 8;
+	required uint32 MCC = 9;
+	required uint32 MNC = 10;
+	required uint32 LAC = 11;
+	required uint32 CellId = 12;
+	required uint32 BSIC = 13;
+	required uint32 RAC = 14;
+	required uint32 T3212Value = 15;
+	required uint32 PagingOccurence = 16;
+	required uint32 LevelServiceSupported = 17;
+	required uint32 NetworkModeOperation = 18;
+	required uint32 TA = 19;
+}
+
+
+message GsmLog_p {
+   required uint32 reg_time = 1;
+   required uint32 active_time = 2;
+   required uint32 sent_bytes = 3;
+   required uint32 received_bytes = 4;
+}
+
+
+message Accel_p {
+   required bool state = 1;
+   optional uint32 threshold = 2;
+   optional uint32 mode = 3;  /* not clear yet */
+}
+
+
+message Device_p {
+	required string sn = 1 [(nanopb).max_size = 40];		/* EW-yymmvvnnnn-T "EW-1409010234-T" */
+	required uint32 hw_version = 2;
+	required uint32 sw_version_maj = 3;
+	required uint32 sw_version_min = 4;
+	required uint64 time = 5;
+	required uint32 uptime = 6;
+	required uint32 holdtime = 7;
+	required uint32 battery = 8;
+	required uint32 time_interval = 9;
+	required bool accel_state = 10;
+}
+
+
+message Network_p {
+   required string server1 = 1;
+   required string server2 = 2;
+   required uint32 port = 5;
+}
+
+
+/*
+	GET - /sync
+	Use only for collection data from device
+*/
+message RequestedPack_p {
+		
+	enum Pack {
+		GSMMODULE = 0;
+		GSMSIGNAL = 1;
+		GSMCELL = 2;
+		GSMLOG = 3;
+		ACCEL = 4;
+		DEVICE = 5;
+		NETWORK = 6;
+	}
+	
+	required Pack pack = 1;
+	
+	enum Detail {
+		BASE = 0;
+		FULL = 1;
+	}
+
+	required Detail detail = 2 [default = BASE];
+	
+	required string uri = 3 [(nanopb).max_size = 10];
+}
+
+
+message DataRequest_p {
+	repeated RequestedPack_p packs = 1;
+}
+
+
+/* GET - /cmd
+message RequestCmd_p {
+	enum CMD {
+		POST_GPS = 0;
+		GSMSIGNAL = 1;
+		GSMCELL = 2;
+		GSMLOG = 3;
+		ACCEL = 4;
+		DEVICE = 5;
+		NETWORK = 6;
+	}
+	
+	required CMD cmd = 1;
+	
+	required  cmd = 1;
+}
+
+message CmdRequest_p {
+	repeated RequestedPack_p packs = 1;
+}
+*/
+
+message Update_p {
+	required string url = 1 [(nanopb).max_size = 40];
+	required uint32 port = 2;
+	required string fname = 3 [(nanopb).max_size = 20];
+	required uint32 sw_version_maj = 4;
+	required uint32 sw_version_min = 5;
+}
+
+
+message HWTestMessage_p {
+	required GSMModule_p gsm_module = 1;
+	required GSMSignal_p gsm_signal = 2;
+	required Device_p device = 3;
+//  optional GSMCell gsm_cell = 3;
+}
+
+
